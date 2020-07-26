@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea9424c0269b1ea49ae10a4ddf0cd91e, type: 3}
+  m_Name: SenarioMasterData
+  m_EditorClassIdentifier: 
+  senarioMasterData:
+    senario:
+    - senarioNo: 0
+      messageString: "\u3042\u3044\u3046\u3048\u304A,\u304B\u304D\u304F\u3051\u3053"
+      charaNoString: 1,2
+      branchString: 0,1
+      displayCharaString: 3/0,1
+      backgroundImageNo: 0
+      messages:
+      - "\u3042\u3044\u3046\u3048\u304A"
+      - "\u304B\u304D\u304F\u3051\u3053"
+      charaTypes: 0100000002000000
+      branchs: 0000000001000000
+    - senarioNo: 1
+      messageString: "\u3055\u3057\u3059\u305B\u305D,\u305F\u3061\u3064\u3066\u3068"
+      charaNoString: 0,1
+      branchString: 0,1,2
+      displayCharaString: 0,2/1
+      backgroundImageNo: 1
+      messages:
+      - "\u3055\u3057\u3059\u305B\u305D"
+      - "\u305F\u3061\u3064\u3066\u3068"
+      charaTypes: 0000000001000000
+      branchs: 000000000100000002000000
+    - senarioNo: 2
+      messageString: "\u308F\u3092\u3093"
+      charaNoString: 2,3
+      branchString: 0
+      displayCharaString: 0,1,2
+      backgroundImageNo: 2
+      messages:
+      - "\u308F\u3092\u3093"
+      charaTypes: 0200000003000000
+      branchs: 00000000

@@ -1,0 +1,29 @@
+{
+  "senario": 
+  [
+    {
+      "senarioNo": "0",
+      "messageString": "あいうえお,かきくけこ",
+      "charaNoString": "1,2",
+      "branchString": "0,1",
+      "displayCharaString" : "3/0,1",
+      "backgroundImageNo" : "0"
+    },
+    {
+      "senarioNo": "1",
+      "messageString": "さしすせそ\nなにぬねの,たちつてと",
+      "charaNoString": "0,1",
+      "branchString": "0,1,2",
+      "displayCharaString" : "0,2/1",
+      "backgroundImageNo" : "1"
+    },
+    {
+      "senarioNo": "2",
+      "messageString": "わをん",
+      "charaNoString": "2,3",
+      "branchString": "0",
+      "displayCharaString" : "0,1,2",
+      "backgroundImageNo" : "2"
+    }
+  ]
+}
