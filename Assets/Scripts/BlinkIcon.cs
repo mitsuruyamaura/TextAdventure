@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 
 [RequireComponent(typeof(CanvasGroup))]
-public class BlinkCanvasGroup : MonoBehaviour
+public class BlinkIcon : MonoBehaviour
 {
     public float durationSeconds;
     public Ease easeType;

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "Assets/Create SenarioScriptableObject", fileName = "SenarioScriptableObject")]
+[CreateAssetMenu(menuName = "Assets/Create SenarioSO", fileName = "SenarioSO")]
 public class SenarioSO : ScriptableObject {
+
     public SenarioMasterData senarioMasterData;
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 [System.Serializable]
 public class SenarioMasterData {
@@ -16,11 +14,14 @@ public class SenarioMasterData {
         public string branchString;
         public string displayCharaString;
         public int backgroundImageNo;
+        public int bgmNo;
+        public string branchMessageString;
 
         // 読み込んだDataを配列に置き換えて代入
         public string[] messages;
         public CHARA_NAME_TYPE[] charaTypes;
         public int[] branchs;
         public Dictionary<int, CHARA_NAME_TYPE[]> displayCharas;
+        public string[] branchMessages;
     }
 }

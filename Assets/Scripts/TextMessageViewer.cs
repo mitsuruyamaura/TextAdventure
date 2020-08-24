@@ -5,15 +5,17 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System.Linq;
 
-public class TextMessageViewer : MonoBehaviour
-{
-    public string[] messages;　　                         // 表示するメッセージのリスト
+public class TextMessageViewer : MonoBehaviour {
+    public string[] messages;　　                            // 表示するメッセージの配列
     public CHARA_NAME_TYPE[] charaTypes;
     public int[] branchs;
     public Dictionary<int, CHARA_NAME_TYPE[]> displayCharas;
 
+    public int bgmNo;                                        // 追加。再生するBGMの設定番号
+    public string[] branchMessages;                          // 追加。分岐用のメッセージの配列
+
     public float wordSpeed;                                  // 1文字当たりの表示速度
-    
+
     public Text txtMessage;                                  // メッセージ表示用
     public Text txtCharaType;
     public Image imgBackground;
@@ -40,7 +42,7 @@ public class TextMessageViewer : MonoBehaviour
     /// シナリオのメッセージや分岐などを設定
     /// </summary>
     /// <param name="senarioData"></param>
-    public void SetUpSenarioData(SenarioMasterData.SenarioData senarioData) {
+    public void SetUpScenarioData(SenarioMasterData.SenarioData senarioData) {
         // シナリオの各データを準備
         messages = new string[senarioData.messages.Length];
         messages = senarioData.messages;
@@ -53,6 +55,19 @@ public class TextMessageViewer : MonoBehaviour
 
         displayCharas = new Dictionary<int, CHARA_NAME_TYPE[]>(senarioData.displayCharas);
 
+   //* 以下を追加 *//
+        // 再生するBGMを設定
+        bgmNo = senarioData.bgmNo;
+
+        // 取得した番号のBGMを再生
+        SoundManager.Instance.PlayBGM((SoundManager.BGM_Type)bgmNo);
+
+        // 分岐用のメッセージを設定
+        branchMessages = new string[senarioData.branchMessages.Length];
+        branchMessages = senarioData.branchMessages;
+
+   //* ここまで追加 *//
+
         // 初期化
         messagesIndex = 0;
         isDisplayedAllMessage = false;
@@ -63,7 +78,7 @@ public class TextMessageViewer : MonoBehaviour
         // 1文字ずつメッセージ表示を開始
         StartCoroutine(DisplayMessage());
     }
- 
+
     void Update() {
         if (isDisplayedAllMessage) {
             // 全てのメッセージ表示が終了していたら処理を行わない
@@ -81,7 +96,7 @@ public class TextMessageViewer : MonoBehaviour
             }
             // 全文をまとめて表示
             txtMessage.text = messages[messagesIndex];
-            
+
             // タップするまで全文を表示したまま待機
             StartCoroutine(NextTouch());
         }
@@ -98,12 +113,12 @@ public class TextMessageViewer : MonoBehaviour
     /// <returns></returns>
     private IEnumerator DisplayMessage() {
         isTapped = false;
-        
+
         // 表示テキストとTweenをリセット
         txtMessage.text = "";
         txtCharaType.text = "";
         tween = null;
-        
+
         // 文字送りの待機時間を初期化
         if (waitCoroutine != null) {
             StopCoroutine(waitCoroutine);
@@ -128,12 +143,12 @@ public class TextMessageViewer : MonoBehaviour
                         if (item.Value[i] == chara.charaNameType) {
                             // 表示させる設定なら表示
                             chara.gameObject.SetActive(true);
-                        } 
+                        }
                     }
                 }
             }
         }
-        
+
         // 1文字ずつの文字送り表示が終了するまでループ
         while (messages[messagesIndex].Length > wordCount) {
             // wordSpeed秒ごとに、文字を1文字ずつ表示。SetEase(Ease.Linear)をセットすることで一定の表示間隔で表示
@@ -147,7 +162,7 @@ public class TextMessageViewer : MonoBehaviour
             waitCoroutine = WaitTime();
             yield return StartCoroutine(waitCoroutine);
         }
-        
+
         // タップするまで全文を表示したまま待機
         StartCoroutine(NextTouch());
     }
@@ -201,7 +216,7 @@ public class TextMessageViewer : MonoBehaviour
 
             } else {
                 // 分岐ボタンの作成
-                StartCoroutine(gameDirector.CreateBranchSelectButton(branchs.Length));
+                StartCoroutine(gameDirector.CreateBranchSelectButton(branchMessages));
             }
         }
     }

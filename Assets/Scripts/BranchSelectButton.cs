@@ -19,13 +19,13 @@ public class BranchSelectButton : MonoBehaviour
     private Sequence sequence;
 
     /// <summary>
-    /// 分岐ボタンの初期設定
+    /// 分岐選択肢ボタンの初期設定
     /// </summary>
     /// <param name="message">分岐のメッセージ</param>
-    /// <param name="no">分岐の番号</param>
+    /// <param name="no">分岐先となるシナリオデータの番号</param>
     /// <param name="director">GameDirector</param>
     public void InitializeBranchSelect(string message, int no, GameDirector director, int count) {
-        // 位置の調整
+        // ゲームオブジェクトを透明にし、位置の調整
         canvasGroup.alpha = 0.0f;
         transform.position = new Vector3(transform.position.x, transform.position.y - (count * 150), transform.position.z);
 
@@ -44,16 +44,19 @@ public class BranchSelectButton : MonoBehaviour
     }
 
     /// <summary>
-    /// 分岐ボタンを押すと呼ばれる
+    /// 分岐選択肢ボタンを押すと呼ばれる
     /// 選択した分岐の番号をGameDirectorへ渡す
     /// </summary>
     private void OnClickChooseBranch() {
         if (isClickable) {
+            // 一度タップしたら処理しない
             return;
         }
+
+        // 一度タップしたら押せなくする
         isClickable = true;
 
-        // 他の分岐ボタンを押せなくする
+        // 他の分岐選択肢ボタンを押せなくする
         gameDirector.InactiveBranchSelectButtons();
 
         // 画面中央から画面右端にアニメ移動し、徐々に透明化
@@ -63,7 +66,7 @@ public class BranchSelectButton : MonoBehaviour
             .Join(canvasGroup.DOFade(0.0f, 1.0f))
             .AppendCallback(() => {
                 Debug.Log("移動終了");
-                // 選択した分岐の番号を渡して次のシナリオを作る
+                // 選択した分岐のシナリオ番号を渡して次のシナリオの再生準備をする
                 gameDirector.ChooseBranch(branchNo);
             }
         );

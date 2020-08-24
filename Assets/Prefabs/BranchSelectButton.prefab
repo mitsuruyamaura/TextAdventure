@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 7646389147718853606}
   - component: {fileID: 8076763058000416683}
   - component: {fileID: 7994894414405086263}
-  - component: {fileID: 3522404986527611020}
   - component: {fileID: 5412181901951814787}
+  - component: {fileID: 3522404986527611020}
   m_Layer: 5
   m_Name: BranchSelectButton
   m_TagString: Untagged
@@ -48,7 +48,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2708511433462473779}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!114 &8076763058000416683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,18 +122,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!225 &3522404986527611020
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2708511433462473779}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!114 &5412181901951814787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,6 +140,18 @@ MonoBehaviour:
   branchNo: 0
   isClickable: 0
   easeType: 1
+--- !u!225 &3522404986527611020
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2708511433462473779}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7864845031893750099
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,7 +196,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7864845031893750099}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!114 &6136495345516622384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -230,4 +230,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: "\u5206\u5C90\u7528\u9078\u629E\u80A2\u306E\u30E1\u30C3\u30BB\u30FC\u30B8\u3092\u8868\u793A"

@@ -1,4 +1,7 @@
-﻿public enum CHARA_NAME_TYPE{
+﻿/// <summary>
+/// キャラクター名を登録する
+/// </summary>
+public enum CHARA_NAME_TYPE {
     A,
     B,
     C,
