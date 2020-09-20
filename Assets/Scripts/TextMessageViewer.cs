@@ -34,6 +34,8 @@ public class TextMessageViewer : MonoBehaviour {
     private Tween tween;                                     // DoTween再生用。Killできるように代入して使用する
 
     void Start() {
+        iconNextTap.SetActive(false);
+
         // Debug １文字ずつ文字を表示する処理をスタート
         //StartCoroutine(DisplayMessage());
     }
@@ -85,6 +87,12 @@ public class TextMessageViewer : MonoBehaviour {
             return;
         }
 
+        if (Input.GetMouseButtonDown(0) && wordCount == messages[messagesIndex].Length)
+        {
+            // 全文表示中にタップしたら全文表示を終了
+            isTapped = true;
+        }
+
         if (Input.GetMouseButtonDown(0) && tween != null) {
             // 文字送り中にタップした場合、文字送りを停止
             tween.Kill();
@@ -97,14 +105,12 @@ public class TextMessageViewer : MonoBehaviour {
             // 全文をまとめて表示
             txtMessage.text = messages[messagesIndex];
 
+            // メッセージ表示完了処理
+            CompleteOneMessage();
+
             // タップするまで全文を表示したまま待機
             StartCoroutine(NextTouch());
-        }
-
-        if (Input.GetMouseButtonDown(0) && wordCount == messages[messagesIndex].Length) {
-            // 全文表示中にタップしたら全文表示を終了
-            isTapped = true;
-        }
+        }        
     }
 
     /// <summary>
@@ -155,16 +161,14 @@ public class TextMessageViewer : MonoBehaviour {
             tween = txtMessage.DOText(messages[messagesIndex], messages[messagesIndex].Length * wordSpeed).
                 SetEase(Ease.Linear).OnComplete(() => {
                     Debug.Log("全文表示 完了");
-                    // (TODO) 他にも処理があれば追加する
 
+                    // メッセージ表示完了処理
+                    CompleteOneMessage();
                 });
             // 文字送り表示が終了するまでの待機時間を設定して待機を実行
             waitCoroutine = WaitTime();
             yield return StartCoroutine(waitCoroutine);
         }
-
-        // タップするまで全文を表示したまま待機
-        StartCoroutine(NextTouch());
     }
 
     /// <summary>
@@ -177,17 +181,21 @@ public class TextMessageViewer : MonoBehaviour {
     }
 
     /// <summary>
-    /// タップするまで全文を表示したまま待機
+    /// １つ分のメッセージ表示完了処理
     /// </summary>
-    /// <returns></returns>
-    private IEnumerator NextTouch() {
-        yield return null;
+    private void CompleteOneMessage() {
         // 表示した文字の総数を更新
         wordCount = messages[messagesIndex].Length;
 
         // タップを促すイメージ表示
         iconNextTap.SetActive(true);
+    }
 
+    /// <summary>
+    /// タップするまで全文を表示したまま待機
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator NextTouch() {
         // タップを待つ
         yield return new WaitUntil(() => isTapped);
 
