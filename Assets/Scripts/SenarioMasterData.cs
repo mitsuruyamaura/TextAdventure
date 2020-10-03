@@ -16,6 +16,7 @@ public class SenarioMasterData {
         public int backgroundImageNo;
         public int bgmNo;
         public string branchMessageString;
+        public int autoScenarioNo;
 
         // 読み込んだDataを配列に置き換えて代入
         public string[] messages;

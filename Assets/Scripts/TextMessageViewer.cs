@@ -33,6 +33,8 @@ public class TextMessageViewer : MonoBehaviour {
     private IEnumerator waitCoroutine;                       // 全文表示までの待機時間メソッド代入用。Stopできるようにしておく
     private Tween tween;                                     // DoTween再生用。Killできるように代入して使用する
 
+    public int autoScenerioNo;
+
     void Start() {
         iconNextTap.SetActive(false);
 
@@ -76,6 +78,8 @@ public class TextMessageViewer : MonoBehaviour {
 
         // シナリオの背景を設定
         imgBackground.sprite = Resources.Load<Sprite>("BackGround/" + senarioData.backgroundImageNo);
+
+        autoScenerioNo = senarioData.autoScenarioNo;
 
         // 1文字ずつメッセージ表示を開始
         StartCoroutine(DisplayMessage());
@@ -223,8 +227,16 @@ public class TextMessageViewer : MonoBehaviour {
                 }
 
             } else {
-                // 分岐ボタンの作成
-                StartCoroutine(gameDirector.CreateBranchSelectButton(branchMessages));
+                if (branchs[0] == -1) {
+                    // 分岐なしの場合は自動的に次のシナリオを再生
+                    // 次のシナリオの呼び出し
+                    gameDirector.ChooseBranch(autoScenerioNo);
+
+                } else {
+
+                    // 分岐ボタンの作成
+                    StartCoroutine(gameDirector.CreateBranchSelectButton(branchMessages));
+                }
             }
         }
     }

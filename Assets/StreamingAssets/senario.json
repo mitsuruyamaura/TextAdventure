@@ -5,11 +5,12 @@
       "senarioNo": "0",
       "messageString": "あいうえお,かきくけこ",
       "charaNoString": "1,2",
-      "branchString": "0,1",
+      "branchString": "-1",
       "displayCharaString" : "3/0,1",
       "backgroundImageNo" : "0",
       "bgmNo" : "0",
-      "branchMessageString" : "123,aaa"
+      "branchMessageString" : "123,aaa",
+      "autoScenarioNo": "1"
     },
     {
       "senarioNo": "1",
@@ -19,7 +20,8 @@
       "displayCharaString" : "0,2/1",
       "backgroundImageNo" : "1",
       "bgmNo" : "0",
-      "branchMessageString" : "fff,ddd,kkk"
+      "branchMessageString" : "fff,ddd,kkk",
+      "autoScenarioNo": "0"
     },
     {
       "senarioNo": "2",
@@ -29,7 +31,8 @@
       "displayCharaString" : "0,1,2",
       "backgroundImageNo" : "2",
       "bgmNo" : "0",
-      "branchMessageString" : "gggg"
+      "branchMessageString" : "gggg",
+      "autoScenarioNo": "0"
     }
   ]
 }
