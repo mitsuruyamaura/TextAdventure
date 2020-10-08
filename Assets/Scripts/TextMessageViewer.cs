@@ -33,7 +33,9 @@ public class TextMessageViewer : MonoBehaviour {
     private IEnumerator waitCoroutine;                       // 全文表示までの待機時間メソッド代入用。Stopできるようにしておく
     private Tween tween;                                     // DoTween再生用。Killできるように代入して使用する
 
-    public int autoScenerioNo;
+    public int autoScenerioNo;                               // 分岐がないパラグラフ(分岐番号 -1)の場合には、自動的にこの番号の分岐に移動する
+
+    public List<int> conditionalBranchNo;                    // 条件付きの分岐がある場合、その条件となる番号を設定するリスト
 
     void Start() {
         iconNextTap.SetActive(false);
@@ -58,8 +60,7 @@ public class TextMessageViewer : MonoBehaviour {
         branchs = senarioData.branchs;
 
         displayCharas = new Dictionary<int, CHARA_NAME_TYPE[]>(senarioData.displayCharas);
-
-   //* 以下を追加 *//
+  
         // 再生するBGMを設定
         bgmNo = senarioData.bgmNo;
 
@@ -70,7 +71,12 @@ public class TextMessageViewer : MonoBehaviour {
         branchMessages = new string[senarioData.branchMessages.Length];
         branchMessages = senarioData.branchMessages;
 
-   //* ここまで追加 *//
+    //* 以下を追加 *//
+
+        // 条件付きの分岐番号を設定
+        conditionalBranchNo = new List<int>(senarioData.conditionalBranchNo);
+
+    //* ここまで追加 *//
 
         // 初期化
         messagesIndex = 0;
@@ -235,7 +241,7 @@ public class TextMessageViewer : MonoBehaviour {
                 } else {
 
                     // 分岐ボタンの作成
-                    StartCoroutine(gameDirector.CreateBranchSelectButton(branchMessages));
+                    StartCoroutine(gameDirector.CreateBranchSelectButton(branchMessages, branchs, conditionalBranchNo));  // <=　引数変更
                 }
             }
         }

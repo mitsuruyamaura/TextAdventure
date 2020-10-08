@@ -100,13 +100,27 @@ public class GameDirector : MonoBehaviour
     /// <summary>
     /// 全メッセージ再生後に分岐用ボタンを作成
     /// </summary>
-    public IEnumerator CreateBranchSelectButton(string[] branchMessages) {   // <= 引数を変更
-        // 分岐ボタンの生成
+    /// <param name="branchMessages">分岐ボタンに表示する各メッセージ</param>
+    /// <param name="branchs">分岐ボタンを選択した際の次の分岐番号</param>
+    /// <param name="conditionalBranchNo">分岐ボタンを表示するための条件番号</param>
+    /// <returns></returns>
+    public IEnumerator CreateBranchSelectButton(string[] branchMessages, int[] branchs, List<int> conditionalBranchNo) {   // <= 引数を変更
+        // メッセージの数分の分岐ボタンの生成
         for (int i = 0; i < branchMessages.Length; i++) {  // <= for文のリープ回数の指定をbranchMessages.Lengthに変更
+
+            // 条件のある分岐か確認
+            if (i < conditionalBranchNo.Count) {
+                // 分岐の条件の番号を通過しているか確認。通過していなければ分岐を表示しない
+                if (!GameData.instance.chooseBranchList.Contains(conditionalBranchNo[i])) {
+                    continue;
+                }
+            }
+
+            // 分岐ボタンの生成
             BranchSelectButton branchSelectButton = Instantiate(BranchSelectButtonPrefab, branchButtonTran, false);
 
             // 作成した分岐ボタンの設定(第1引数の値をbranchMessagesの内容を参照するように変更)
-            branchSelectButton.InitializeBranchSelect(branchMessages[i], i, this, i);　　// <= 第1引数を変更
+            branchSelectButton.InitializeBranchSelect(branchMessages[i], branchs[i], this, i);　　// <= 第1引数を変更
             branchSelectButtonList.Add(branchSelectButton);　
             yield return new WaitForSeconds(0.5f);
         }
@@ -118,6 +132,9 @@ public class GameDirector : MonoBehaviour
     /// <param name="branchNo"></param>
     public void ChooseBranch(int senarioNo) {
         Debug.Log("分岐選択 シナリオ番号 :" + senarioNo);
+
+        // 選択した分岐の番号を保存
+        GameData.instance.chooseBranchList.Add(senarioNo);
 
         // 次のシナリオの呼び出し
         SetUpSenario(senarioNo);
