@@ -14,6 +14,8 @@ public class GameData : MonoBehaviour
 
     public SenarioSO scenarioSO;
 
+    public List<int> chooseBranchList = new List<int>();
+
     void Awake() {
         if (instance == null) {
             instance = this;
@@ -39,7 +41,25 @@ public class GameData : MonoBehaviour
         foreach (SenarioMasterData.SenarioData senarioData in scenarioSO.senarioMasterData.senario) {
             senarioData.messages = senarioData.messageString.Split(',').ToArray();
             senarioData.charaTypes = senarioData.charaNoString.Split(',').Select(x => (CHARA_NAME_TYPE)Enum.Parse(typeof(CHARA_NAME_TYPE), x)).ToArray();
-            senarioData.branchs = senarioData.branchString.Split(',').Select(x => int.Parse(x)).ToArray();
+            
+            // 条件付きの分岐番号をカンマで分割
+            string[] tempBranchNos = senarioData.branchString.Split(',').ToArray();
+
+            // 分岐番号
+            senarioData.branchs = new int[tempBranchNos.Length];
+
+            for (int x = 0; x < tempBranchNos.Length; x++) {    // - は、マイナスとして判定されてしまって通らない
+                if (tempBranchNos[x].Contains("/")) {
+                    int[] conditionalNo = tempBranchNos[x].Split('/').Select(s => int.Parse(s)).ToArray();
+                    senarioData.branchs[x] = conditionalNo[0];
+                    senarioData.conditionalBranchNo.Add(conditionalNo[1]);                    
+                } else {
+                    senarioData.branchs[x] = int.Parse(tempBranchNos[x]); 
+                }
+            } 
+  
+
+            //senarioData.branchs = senarioData.branchString.Split(',').Select(x => int.Parse(x)).ToArray();
 
             senarioData.branchMessages = senarioData.branchMessageString.Split(',').ToArray(); // 追加。分岐メッセージを配列にする
 

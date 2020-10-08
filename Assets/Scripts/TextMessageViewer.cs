@@ -35,6 +35,8 @@ public class TextMessageViewer : MonoBehaviour {
 
     public int autoScenerioNo;
 
+    public List<int> conditionalBranchNo; 
+
     void Start() {
         iconNextTap.SetActive(false);
 
@@ -70,7 +72,10 @@ public class TextMessageViewer : MonoBehaviour {
         branchMessages = new string[senarioData.branchMessages.Length];
         branchMessages = senarioData.branchMessages;
 
-   //* ここまで追加 *//
+        // 条件付きの分岐番号を設定
+        conditionalBranchNo = new List<int>(senarioData.conditionalBranchNo);
+
+        //* ここまで追加 *//
 
         // 初期化
         messagesIndex = 0;
@@ -235,7 +240,7 @@ public class TextMessageViewer : MonoBehaviour {
                 } else {
 
                     // 分岐ボタンの作成
-                    StartCoroutine(gameDirector.CreateBranchSelectButton(branchMessages));
+                    StartCoroutine(gameDirector.CreateBranchSelectButton(branchMessages, branchs, conditionalBranchNo));
                 }
             }
         }

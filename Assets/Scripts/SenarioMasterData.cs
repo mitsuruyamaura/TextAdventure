@@ -24,5 +24,6 @@ public class SenarioMasterData {
         public int[] branchs;
         public Dictionary<int, CHARA_NAME_TYPE[]> displayCharas;
         public string[] branchMessages;
+        public List<int> conditionalBranchNo;
     }
 }
