@@ -53,10 +53,10 @@ public class GameData : MonoBehaviour
                 if (tempBranchNos[x].Contains("/")) {
                     // 条件付きの分岐の場合、/ の位置で文字列を分割
                     int[] conditionalNo = tempBranchNos[x].Split('/').Select(s => int.Parse(s)).ToArray();
-                    // 最初の番号を分岐番号として代入
-                    senarioData.branchs[x] = conditionalNo[0];
-                    // 次の番号を条件の番号として代入
-                    senarioData.conditionalBranchNo.Add(conditionalNo[1]);                    
+                    // 最後の番号を分岐番号として代入
+                    senarioData.branchs[x] = conditionalNo[1];
+                    // 最初の番号を条件の番号として代入
+                    senarioData.conditionalBranchNo.Add(conditionalNo[0]);                    
                 } else {
                     // 条件のない通常の分岐はそのまま配列に代入
                     senarioData.branchs[x] = int.Parse(tempBranchNos[x]); 

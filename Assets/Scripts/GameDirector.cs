@@ -104,9 +104,9 @@ public class GameDirector : MonoBehaviour
     /// <param name="branchs">分岐ボタンを選択した際の次の分岐番号</param>
     /// <param name="conditionalBranchNo">分岐ボタンを表示するための条件番号</param>
     /// <returns></returns>
-    public IEnumerator CreateBranchSelectButton(string[] branchMessages, int[] branchs, List<int> conditionalBranchNo) {   // <= 引数を変更
+    public IEnumerator CreateBranchSelectButton(string[] branchMessages, int[] branchs, List<int> conditionalBranchNo) {
         // メッセージの数分の分岐ボタンの生成
-        for (int i = 0; i < branchMessages.Length; i++) {  // <= for文のリープ回数の指定をbranchMessages.Lengthに変更
+        for (int i = 0; i < branchMessages.Length; i++) {
 
             // 条件のある分岐か確認
             if (i < conditionalBranchNo.Count) {
@@ -120,7 +120,7 @@ public class GameDirector : MonoBehaviour
             BranchSelectButton branchSelectButton = Instantiate(BranchSelectButtonPrefab, branchButtonTran, false);
 
             // 作成した分岐ボタンの設定(第1引数の値をbranchMessagesの内容を参照するように変更)
-            branchSelectButton.InitializeBranchSelect(branchMessages[i], branchs[i], this, i);　　// <= 第1引数を変更
+            branchSelectButton.InitializeBranchSelect(branchMessages[i], branchs[i], this, i);
             branchSelectButtonList.Add(branchSelectButton);　
             yield return new WaitForSeconds(0.5f);
         }

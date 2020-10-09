@@ -16,7 +16,7 @@
       "senarioNo": "1",
       "messageString": "さしすせそ\nなにぬねの,たちつてと",
       "charaNoString": "0,1",
-      "branchString": "0/5,1,2",
+      "branchString": "5/1/0,1,2",
       "displayCharaString" : "0,2/1",
       "backgroundImageNo" : "1",
       "bgmNo" : "0",
