@@ -37,6 +37,8 @@ public class TextMessageViewer : MonoBehaviour {
 
     public List<int> conditionalBranchNo;                    // 条件付きの分岐がある場合、その条件となる番号を設定するリスト
 
+    public int endingNo;
+
     void Start() {
         iconNextTap.SetActive(false);
 
@@ -86,6 +88,10 @@ public class TextMessageViewer : MonoBehaviour {
         imgBackground.sprite = Resources.Load<Sprite>("BackGround/" + senarioData.backgroundImageNo);
 
         autoScenerioNo = senarioData.autoScenarioNo;
+
+        if (senarioData.endingNo != 0) {
+            endingNo = senarioData.endingNo;
+        }
 
         // 1文字ずつメッセージ表示を開始
         StartCoroutine(DisplayMessage());
@@ -232,6 +238,12 @@ public class TextMessageViewer : MonoBehaviour {
                     displayCharasList[i].gameObject.SetActive(false);
                 }
 
+                // まだこのエンディングを見ていなければ(エンディングの番号リストになければ)、エンディングの番号を保存
+                if (GameData.instance.endingNos.Contains(endingNo)) {
+                    GameData.instance.SaveEndingData(endingNo);
+                    Debug.Log("Ending SaveNo :" + endingNo);
+                }
+
             } else {
                 if (branchs[0] == -1) {
                     // 分岐なしの場合は自動的に次のシナリオを再生
@@ -250,7 +262,10 @@ public class TextMessageViewer : MonoBehaviour {
     private bool JudgeEnding() {
         // エンディングの条件によって分岐
 
-        // Trueならエンディング
+        if (endingNo != 0) {
+            // Trueならエンディング
+            return true;
+        }        
 
         return false;
     }
