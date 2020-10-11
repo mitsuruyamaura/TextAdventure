@@ -375,6 +375,9 @@ MonoBehaviour:
   SE_Volume: 1
   Mute: 0
   scenarioSO: {fileID: 11400000, guid: b2463678855c7764a953f56edc4cadcd, type: 2}
+  chooseBranchList: 
+  endingCount: 0
+  endingNos: 
 --- !u!4 &1340842200
 Transform:
   m_ObjectHideFlags: 0
@@ -398,6 +401,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1438223102}
+  - component: {fileID: 1438223103}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -419,6 +423,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1438223103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438223101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7aa1d059e72f3484e8bcc7d2b1832d6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isNewGameButton: 0
+  btnNewGame: {fileID: 0}
 --- !u!1 &1609357590
 GameObject:
   m_ObjectHideFlags: 0
@@ -1472,6 +1490,8 @@ MonoBehaviour:
   iconNextTap: {fileID: 2500757137305641475}
   gameDirector: {fileID: 6795817591488950612}
   autoScenerioNo: 0
+  conditionalBranchNo: 
+  endingNo: 0
 --- !u!1 &3346609442060674277
 GameObject:
   m_ObjectHideFlags: 0
