@@ -16,6 +16,12 @@ public class GameData : MonoBehaviour
 
     public List<int> chooseBranchList = new List<int>();
 
+    public int endingCount;
+
+    public List<int> endingNos = new List<int>();
+
+    private string ENDING = "ending_";
+
     void Awake() {
         if (instance == null) {
             instance = this;
@@ -79,5 +85,31 @@ public class GameData : MonoBehaviour
             }
         }
         Debug.Log("Create SenarioDataList");
+    }
+
+    /// <summary>
+    /// 見たエンディングの番号を保存
+    /// </summary>
+    /// <param name="endingNo"></param>
+    public void SaveEndingData(int endingNo) {
+        PlayerPrefs.SetInt(ENDING + endingNo.ToString(), endingNo);
+        PlayerPrefs.Save();
+    }    
+
+    /// <summary>
+    /// 保存されているエンディングがあるか確認し、すべて通過している場合にはtrueとする
+    /// </summary>
+    /// <returns></returns>
+    public bool LoadCheckEndingData() {
+        // 現在までに見ているエンディングを確認     
+        for (int i = 1; i < endingCount + 1; i++) {
+            // 保存されているエンディングを１つずつ確認
+            if (PlayerPrefs.HasKey(ENDING + i.ToString())) {
+                // 見ているエンディングの番号だけ読み込み
+                endingNos.Add(PlayerPrefs.GetInt(ENDING + i.ToString(), 0));
+            }
+        }
+        // 見ているエンディングの数とエンディングの総数が同じになったらコンプリート
+        return endingCount == endingNos.Count ? true : false;
     }
 }

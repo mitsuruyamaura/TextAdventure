@@ -10,7 +10,8 @@
       "backgroundImageNo" : "0",
       "bgmNo" : "0",
       "branchMessageString" : "123,aaa",
-      "autoScenarioNo": "1"
+      "autoScenarioNo": "1",
+      "endingNo": "0"
     },
     {
       "senarioNo": "1",
@@ -21,7 +22,8 @@
       "backgroundImageNo" : "1",
       "bgmNo" : "0",
       "branchMessageString" : "fff,ddd,kkk",
-      "autoScenarioNo": "0"
+      "autoScenarioNo": "0",
+      "endingNo": "1"
     },
     {
       "senarioNo": "2",
@@ -32,7 +34,8 @@
       "backgroundImageNo" : "2",
       "bgmNo" : "0",
       "branchMessageString" : "gggg",
-      "autoScenarioNo": "0"
+      "autoScenarioNo": "0",
+      "endingNo": "0"
     }
   ]
 }
