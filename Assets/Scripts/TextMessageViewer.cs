@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using System.Linq;
+using UnityEngine.EventSystems;        // 追加
 
 public class TextMessageViewer : MonoBehaviour {
     public string[] messages;　　                            // 表示するメッセージの配列
@@ -39,11 +40,20 @@ public class TextMessageViewer : MonoBehaviour {
 
     public int endingNo;
 
+    public Button btnAutoPlay;
+    public Button btnSkip;
+
+    public bool isAutoPlay;
+    public bool isSkip;
+
     void Start() {
         iconNextTap.SetActive(false);
 
         // Debug １文字ずつ文字を表示する処理をスタート
         //StartCoroutine(DisplayMessage());
+
+        btnAutoPlay.onClick.AddListener(OnClickAutoPlay);
+        btnSkip.onClick.AddListener(OnClickSkip);
     }
 
     /// <summary>
@@ -73,12 +83,11 @@ public class TextMessageViewer : MonoBehaviour {
         branchMessages = new string[senarioData.branchMessages.Length];
         branchMessages = senarioData.branchMessages;
 
-    //* 以下を追加 *//
-
         // 条件付きの分岐番号を設定
         conditionalBranchNo = new List<int>(senarioData.conditionalBranchNo);
 
-    //* ここまで追加 *//
+        //* 以下を追加 *//
+        //* ここまで追加 *//
 
         // 初期化
         messagesIndex = 0;
@@ -103,13 +112,32 @@ public class TextMessageViewer : MonoBehaviour {
             return;
         }
 
-        if (Input.GetMouseButtonDown(0) && wordCount == messages[messagesIndex].Length)
-        {
+        if (Input.GetMouseButtonDown(0) && wordCount == messages[messagesIndex].Length) {
+
+            //* ここから追加 *//
+
+            // ボタンがクリックされていたら、画面クリックは無効にする
+            if (EventSystem.current.currentSelectedGameObject != null) {
+                return;
+            }
+
+            //* ここまで追加 *//
+
             // 全文表示中にタップしたら全文表示を終了
             isTapped = true;
         }
 
         if (Input.GetMouseButtonDown(0) && tween != null) {
+
+            //* ここから追加 *//
+
+            // ボタンがクリックされていたら、画面クリックは無効にする
+            if (EventSystem.current.currentSelectedGameObject != null){ 
+                return; 
+            }
+
+            //* ここまで追加 *//
+
             // 文字送り中にタップした場合、文字送りを停止
             tween.Kill();
             tween = null;
@@ -126,7 +154,7 @@ public class TextMessageViewer : MonoBehaviour {
 
             // タップするまで全文を表示したまま待機
             StartCoroutine(NextTouch());
-        }        
+        }
     }
 
     /// <summary>
@@ -178,12 +206,18 @@ public class TextMessageViewer : MonoBehaviour {
                 SetEase(Ease.Linear).OnComplete(() => {
                     Debug.Log("全文表示 完了");
 
-                    // メッセージ表示完了処理
-                    CompleteOneMessage();
+                        // メッセージ表示完了処理
+                        CompleteOneMessage();
+
+                    if (isAutoPlay) {
+                        StartCoroutine(NextTouch());
+                        Debug.Log("オート再生中");
+                    }
                 });
             // 文字送り表示が終了するまでの待機時間を設定して待機を実行
             waitCoroutine = WaitTime();
             yield return StartCoroutine(waitCoroutine);
+            break;
         }
     }
 
@@ -212,9 +246,12 @@ public class TextMessageViewer : MonoBehaviour {
     /// </summary>
     /// <returns></returns>
     private IEnumerator NextTouch() {
-        // タップを待つ
-        yield return new WaitUntil(() => isTapped);
-
+        if (!isAutoPlay) {
+            // タップを待つ
+            yield return new WaitUntil(() => isTapped);
+            Debug.Log("非オート。タップ待ち");
+        }
+        
         iconNextTap.SetActive(false);
 
         // 次のメッセージ準備
@@ -268,5 +305,19 @@ public class TextMessageViewer : MonoBehaviour {
         }        
 
         return false;
+    }
+
+    public void OnClickAutoPlay() {
+        isAutoPlay = !isAutoPlay;
+        if (isAutoPlay) {
+            btnAutoPlay.image.color = btnAutoPlay.colors.pressedColor;
+        } else {
+            btnAutoPlay.image.color = btnAutoPlay.colors.normalColor;
+        }
+    }
+
+    public void OnClickSkip() {
+        isSkip = !isSkip;
+
     }
 }
