@@ -33,10 +33,18 @@ public class Title : MonoBehaviour
     }
 
     void Start() {
-        // 
+        // 見ているエンディングがあるか確認
         if (GameData.instance.endingCount > 0) {
             CheckEndingCount();
         }
+
+        // 追加
+
+        // 既読のシナリオ分岐番号を取得
+        GameData.instance.LoadReadBranchNos();
+
+        // ここまで
+
     }
 
     /// <summary>

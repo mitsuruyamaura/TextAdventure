@@ -22,6 +22,11 @@ public class GameData : MonoBehaviour
 
     private string ENDING = "ending_";
 
+    private string READ_BRANCH_NO = "readBranchNo_";
+
+    public List<int> readBranchNoList = new List<int>();
+
+
     void Awake() {
         if (instance == null) {
             instance = this;
@@ -111,5 +116,25 @@ public class GameData : MonoBehaviour
         }
         // 見ているエンディングの数とエンディングの総数が同じになったらコンプリート
         return endingCount == endingNos.Count ? true : false;
+    }
+
+    /// <summary>
+    /// 既読のシナリオ分岐番号の登録
+    /// </summary>
+    /// <param name="branchNo"></param>
+    public void SaveReadBranchNo(int branchNo) {
+        PlayerPrefs.SetInt(READ_BRANCH_NO + branchNo.ToString(), branchNo);
+        PlayerPrefs.Save();
+    }
+
+    public void LoadReadBranchNos() {
+        // 全シナリオ分岐番号を順番に照合
+        for (int i = 0; i < scenarioSO.senarioMasterData.senario.Count; i++) {
+            // 保存されている分岐番号を１つずつ確認
+            if (PlayerPrefs.HasKey(READ_BRANCH_NO + i.ToString())) {
+                // 保存されている番号があったらListに追加
+                readBranchNoList.Add(PlayerPrefs.GetInt(READ_BRANCH_NO + i.ToString()));
+            }
+        }
     }
 }

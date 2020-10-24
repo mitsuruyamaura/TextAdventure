@@ -7,6 +7,7 @@ using System.Linq;
 using UnityEngine.EventSystems;        // 追加
 
 public class TextMessageViewer : MonoBehaviour {
+
     public string[] messages;　　                            // 表示するメッセージの配列
     public CHARA_NAME_TYPE[] charaTypes;
     public int[] branchs;
@@ -40,11 +41,19 @@ public class TextMessageViewer : MonoBehaviour {
 
     public int endingNo;
 
+
+    // 未
+
     public Button btnAutoPlay;
     public Button btnSkip;
 
     public bool isAutoPlay;
     public bool isSkip;
+
+    public bool isReadBranchNo;
+
+    public int currentBranchNo;
+
 
     void Start() {
         iconNextTap.SetActive(false);
@@ -54,6 +63,8 @@ public class TextMessageViewer : MonoBehaviour {
 
         btnAutoPlay.onClick.AddListener(OnClickAutoPlay);
         btnSkip.onClick.AddListener(OnClickSkip);
+
+        isReadBranchNo = false;
     }
 
     /// <summary>
@@ -101,6 +112,23 @@ public class TextMessageViewer : MonoBehaviour {
         if (senarioData.endingNo != 0) {
             endingNo = senarioData.endingNo;
         }
+
+
+        //  追加
+
+        // 現在のシナリオの分岐番号を設定
+        currentBranchNo = senarioData.senarioNo;
+
+        // 既読のシナリオ分岐番号が確認
+        foreach (int readBranchNo in GameData.instance.readBranchNoList) {
+            if (readBranchNo == currentBranchNo) {
+                isReadBranchNo = true;
+            }
+        }
+
+        // ここまで
+
+
 
         // 1文字ずつメッセージ表示を開始
         StartCoroutine(DisplayMessage());
@@ -266,6 +294,15 @@ public class TextMessageViewer : MonoBehaviour {
             // 全メッセージ表示終了
             isDisplayedAllMessage = true;
 
+
+            // 追加
+
+            // 現在のシナリオの分岐番号を既読番号として保存
+            GameData.instance.SaveReadBranchNo(currentBranchNo);
+
+            // ここまで
+　
+
             // エンディングか確認
             if (JudgeEnding()) {
                 // エンディングの場合の処理
@@ -307,8 +344,12 @@ public class TextMessageViewer : MonoBehaviour {
         return false;
     }
 
+
+    // 追加
+
     public void OnClickAutoPlay() {
         isAutoPlay = !isAutoPlay;
+
         if (isAutoPlay) {
             btnAutoPlay.image.color = btnAutoPlay.colors.pressedColor;
         } else {
@@ -319,5 +360,19 @@ public class TextMessageViewer : MonoBehaviour {
     public void OnClickSkip() {
         isSkip = !isSkip;
 
+        if (isSkip) {
+            btnSkip.image.color = btnSkip.colors.pressedColor;
+        } else {
+            btnSkip.image.color = btnSkip.colors.normalColor;
+        }
+
+        // 既読でかつ、既読スキップの場合には自動的にオート再生にする
+        if (isSkip && isReadBranchNo) {
+            isAutoPlay = true;
+            wordSpeed = 0f;
+        }
     }
+
+
+    // ここまで
 }
