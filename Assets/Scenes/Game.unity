@@ -1418,7 +1418,7 @@ PrefabInstance:
     - target: {fileID: 2502162933547640357, guid: 6bc507f245a48124787a8c4776fbd4b9,
         type: 3}
       propertyPath: readBranchNoList.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2502162933547640362, guid: 6bc507f245a48124787a8c4776fbd4b9,
         type: 3}
