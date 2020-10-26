@@ -119,7 +119,7 @@ public class GameData : MonoBehaviour
     }
 
     /// <summary>
-    /// 既読のシナリオ分岐番号の登録
+    /// 既読のシナリオ分岐番号の登録(現在の登録のタイミングは各シナリオの全メッセージ表示後)
     /// </summary>
     /// <param name="branchNo"></param>
     public void SaveReadBranchNo(int branchNo) {
@@ -127,6 +127,9 @@ public class GameData : MonoBehaviour
         PlayerPrefs.Save();
     }
 
+    /// <summary>
+    /// 既読のシナリオ分岐番号を取得
+    /// </summary>
     public void LoadReadBranchNos() {
         // 全シナリオ分岐番号を順番に照合
         for (int i = 0; i < scenarioSO.senarioMasterData.senario.Count; i++) {
@@ -134,7 +137,13 @@ public class GameData : MonoBehaviour
             if (PlayerPrefs.HasKey(READ_BRANCH_NO + i.ToString())) {
                 // 保存されている番号があったらListに追加
                 readBranchNoList.Add(PlayerPrefs.GetInt(READ_BRANCH_NO + i.ToString()));
+
+                Debug.Log("既読シナリオ番号 : " + PlayerPrefs.GetInt(READ_BRANCH_NO + i.ToString()));
             }
+        }
+
+        if (readBranchNoList.Count == 0) {
+            Debug.Log("既読シナリオなし");
         }
     }
 }

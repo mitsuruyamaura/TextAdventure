@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0, g: 0.17571974, b: 1, a: 1}
+    m_PressedColor: {r: 0.5943396, g: 0.664262, b: 0.990566, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -1420,6 +1420,16 @@ PrefabInstance:
       propertyPath: readBranchNoList.Array.size
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2502162933547640357, guid: 6bc507f245a48124787a8c4776fbd4b9,
+        type: 3}
+      propertyPath: readBranchNoList.Array.data[0]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2502162933547640357, guid: 6bc507f245a48124787a8c4776fbd4b9,
+        type: 3}
+      propertyPath: readBranchNoList.Array.data[1]
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2502162933547640362, guid: 6bc507f245a48124787a8c4776fbd4b9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1870,11 +1880,12 @@ MonoBehaviour:
   conditionalBranchNo: 
   endingNo: 0
   btnAutoPlay: {fileID: 1294727301}
-  btnSkip: {fileID: 161053108}
   isAutoPlay: 0
-  isSkip: 0
+  btnSkip: {fileID: 161053108}
+  isSkipReadingMessage: 0
   isReadBranchNo: 0
   currentBranchNo: 0
+  skipSpeed: 0
 --- !u!1 &3346609442060674277
 GameObject:
   m_ObjectHideFlags: 0

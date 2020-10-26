@@ -41,18 +41,21 @@ public class TextMessageViewer : MonoBehaviour {
 
     public int endingNo;
 
-
-    // 未
-
     public Button btnAutoPlay;
-    public Button btnSkip;
 
     public bool isAutoPlay;
-    public bool isSkip;
+
+    public Button btnSkip;
+
+    public bool isSkipReadingMessage;
 
     public bool isReadBranchNo;
 
     public int currentBranchNo;
+
+    public float skipSpeed = 0f;
+
+    private float currentWordSpeed;
 
 
     void Start() {
@@ -62,9 +65,9 @@ public class TextMessageViewer : MonoBehaviour {
         //StartCoroutine(DisplayMessage());
 
         btnAutoPlay.onClick.AddListener(OnClickAutoPlay);
-        btnSkip.onClick.AddListener(OnClickSkip);
+        btnSkip.onClick.AddListener(OnClickSkipReadingMessage);
 
-        isReadBranchNo = false;
+        currentWordSpeed = wordSpeed;
     }
 
     /// <summary>
@@ -97,9 +100,6 @@ public class TextMessageViewer : MonoBehaviour {
         // 条件付きの分岐番号を設定
         conditionalBranchNo = new List<int>(senarioData.conditionalBranchNo);
 
-        //* 以下を追加 *//
-        //* ここまで追加 *//
-
         // 初期化
         messagesIndex = 0;
         isDisplayedAllMessage = false;
@@ -113,22 +113,28 @@ public class TextMessageViewer : MonoBehaviour {
             endingNo = senarioData.endingNo;
         }
 
-
-        //  追加
+        // 未読/既読シナリオの判定を初期化(未読とする)
+        isReadBranchNo = false;
 
         // 現在のシナリオの分岐番号を設定
         currentBranchNo = senarioData.senarioNo;
 
-        // 既読のシナリオ分岐番号が確認
+        // 既読のシナリオ分岐番号かどうか確認
         foreach (int readBranchNo in GameData.instance.readBranchNoList) {
             if (readBranchNo == currentBranchNo) {
+                // このシナリオデータは既読状態
                 isReadBranchNo = true;
             }
         }
 
-        // ここまで
+        // 既読のシナリオではない場合には自動再生を停止して文字送りの速度を戻す
+        if (!isReadBranchNo) {
+            isAutoPlay = false;
+            currentWordSpeed = wordSpeed;
+        }
 
-
+        // 既読スキップ
+        SkipMessage();
 
         // 1文字ずつメッセージ表示を開始
         StartCoroutine(DisplayMessage());
@@ -142,14 +148,10 @@ public class TextMessageViewer : MonoBehaviour {
 
         if (Input.GetMouseButtonDown(0) && wordCount == messages[messagesIndex].Length) {
 
-            //* ここから追加 *//
-
             // ボタンがクリックされていたら、画面クリックは無効にする
             if (EventSystem.current.currentSelectedGameObject != null) {
                 return;
             }
-
-            //* ここまで追加 *//
 
             // 全文表示中にタップしたら全文表示を終了
             isTapped = true;
@@ -157,14 +159,10 @@ public class TextMessageViewer : MonoBehaviour {
 
         if (Input.GetMouseButtonDown(0) && tween != null) {
 
-            //* ここから追加 *//
-
             // ボタンがクリックされていたら、画面クリックは無効にする
             if (EventSystem.current.currentSelectedGameObject != null){ 
                 return; 
             }
-
-            //* ここまで追加 *//
 
             // 文字送り中にタップした場合、文字送りを停止
             tween.Kill();
@@ -230,7 +228,7 @@ public class TextMessageViewer : MonoBehaviour {
         // 1文字ずつの文字送り表示が終了するまでループ
         while (messages[messagesIndex].Length > wordCount) {
             // wordSpeed秒ごとに、文字を1文字ずつ表示。SetEase(Ease.Linear)をセットすることで一定の表示間隔で表示
-            tween = txtMessage.DOText(messages[messagesIndex], messages[messagesIndex].Length * wordSpeed).
+            tween = txtMessage.DOText(messages[messagesIndex], messages[messagesIndex].Length * currentWordSpeed).
                 SetEase(Ease.Linear).OnComplete(() => {
                     Debug.Log("全文表示 完了");
 
@@ -255,7 +253,7 @@ public class TextMessageViewer : MonoBehaviour {
     /// </summary>
     /// <returns></returns>
     private IEnumerator WaitTime() {
-        yield return new WaitForSeconds(messages[messagesIndex].Length * wordSpeed);
+        yield return new WaitForSeconds(messages[messagesIndex].Length * currentWordSpeed);
     }
 
     /// <summary>
@@ -294,14 +292,8 @@ public class TextMessageViewer : MonoBehaviour {
             // 全メッセージ表示終了
             isDisplayedAllMessage = true;
 
-
-            // 追加
-
             // 現在のシナリオの分岐番号を既読番号として保存
             GameData.instance.SaveReadBranchNo(currentBranchNo);
-
-            // ここまで
-　
 
             // エンディングか確認
             if (JudgeEnding()) {
@@ -347,6 +339,9 @@ public class TextMessageViewer : MonoBehaviour {
 
     // 追加
 
+    /// <summary>
+    /// 自動再生ボタン
+    /// </summary>
     public void OnClickAutoPlay() {
         isAutoPlay = !isAutoPlay;
 
@@ -357,19 +352,31 @@ public class TextMessageViewer : MonoBehaviour {
         }
     }
 
-    public void OnClickSkip() {
-        isSkip = !isSkip;
+    /// <summary>
+    /// 既読スキップボタン
+    /// </summary>
+    public void OnClickSkipReadingMessage() {
+        isSkipReadingMessage = !isSkipReadingMessage;
 
-        if (isSkip) {
+        if (isSkipReadingMessage) {
             btnSkip.image.color = btnSkip.colors.pressedColor;
         } else {
             btnSkip.image.color = btnSkip.colors.normalColor;
         }
 
-        // 既読でかつ、既読スキップの場合には自動的にオート再生にする
-        if (isSkip && isReadBranchNo) {
+        // 既読スキップ
+        SkipMessage();
+    }
+
+    /// <summary>
+    /// 既読メッセージのスキップを実行
+    /// </summary>
+    private void SkipMessage() {
+        // 既読スキップ実行中で、かつ、既読のシナリオの場合には自動的にオート再生にしてスキップする
+        if (isSkipReadingMessage && isReadBranchNo) {
             isAutoPlay = true;
-            wordSpeed = 0f;
+            currentWordSpeed = skipSpeed;
+            Debug.Log("既読スキップ中");
         }
     }
 

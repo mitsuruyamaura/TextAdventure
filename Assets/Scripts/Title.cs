@@ -40,7 +40,7 @@ public class Title : MonoBehaviour
 
         // 追加
 
-        // 既読のシナリオ分岐番号を取得
+        // セーブされている、既読のシナリオ分岐番号を取得
         GameData.instance.LoadReadBranchNos();
 
         // ここまで
