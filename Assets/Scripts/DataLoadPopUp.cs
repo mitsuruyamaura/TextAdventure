@@ -7,15 +7,19 @@ using UnityEngine.SceneManagement;
 
 public class DataLoadPopUp : MonoBehaviour
 {
-    public LoadDataSelectButton loadSelectbuttonPrefab;   // ロード用ボタンのプレファブ
+    public LoadDataSelectButton loadSelectbuttonPrefab;    // ロード用ボタンのプレファブ
 
-    public List<LoadDataSelectButton> loadSelectButtonList = new List<LoadDataSelectButton>();    // 生成したロード用ボタン管理用のリスト
+    [SerializeField]                                       // 生成したロード用ボタン管理用のリスト。Debugしやすいようにインスペクターに表示
+    private List<LoadDataSelectButton> loadSelectButtonList = new List<LoadDataSelectButton>();
 
-    public Transform loadSelectButtonTran;            // ロードボタンの生成位置の指定
+    [SerializeField]
+    private Transform loadSelectButtonTran;                // ロードボタンの生成位置の指定用。ScrollViewのContentをアサインする
 
-    public CanvasGroup canvasGroup;
+    [SerializeField]
+    private CanvasGroup canvasGroup;                       // CanvasGroupの透明度の制御用
 
-    public Button btnClose;
+    [SerializeField]
+    private Button btnClose;                               // ポップアップを閉じるボタンの制御用
 
     /// <summary>
     /// ポップアップの設定
@@ -37,14 +41,25 @@ public class DataLoadPopUp : MonoBehaviour
         // コンストラクタを使ってDictinaryを初期化
         Dictionary<int, string> loadDatas = new Dictionary<int, string>(GameData.instance.GetSaveDatas());
 
+        // セーブデータがない場合にはこの処理で終了
         if (loadDatas.Count == 0) {
             Debug.Log("SaveData なし");
             return;
         }
 
+        // 通し番号用
+        int i = 0;
+
+        // セーブデータがあった場合、セーブデータの数だけロード用ボタンを生成。ScrollViewのContent(GridLayoutGruop付)に並べる
         foreach (KeyValuePair<int, string> item in loadDatas) {
             LoadDataSelectButton loadSelectButton = Instantiate(loadSelectbuttonPrefab, loadSelectButtonTran, false);
-            loadSelectButton.SetUpLoadSelectButton(item.Key, item.Value, this);
+
+            i++;
+
+            // ロードボタンの初期設定
+            loadSelectButton.SetUpLoadSelectButton(item.Key, item.Value, this, i);
+
+            // ボタン管理用リストに追加
             loadSelectButtonList.Add(loadSelectButton);
         }
     }
@@ -53,9 +68,17 @@ public class DataLoadPopUp : MonoBehaviour
     /// タップされていないロードボタンを重複して押せないように制御
     /// </summary>
     public void InactiveLoadSelectButtons() {
+
+        // ロードボタンをすべて照合
         for (int i = 0; i < loadSelectButtonList.Count; i++) {
+
+            // 重複タップ防止制御が入っていない場合
             if (loadSelectButtonList[i].isClickable) {
+
+                // 制御をいれて重複タップを防止
                 loadSelectButtonList[i].isClickable = true;
+
+                // 徐々に透明にする
                 loadSelectButtonList[i].canvasGroup.DOFade(0.0f, 0.5f);
             }
         }
@@ -67,22 +90,33 @@ public class DataLoadPopUp : MonoBehaviour
     /// セーブした分岐番号からゲーム再開
     /// </summary>
     public void LoadGame() {
+
+        // Sequenceの初期化
         Sequence sequence = DOTween.Sequence();
 
+        // 徐々にポップアップを透明にする
         sequence.Append(canvasGroup.DOFade(0, 1.0f));
-        sequence.AppendInterval(1.0f);
 
-        SceneManager.LoadScene("Game");
+        sequence.AppendInterval(0.2f).OnComplete(() => {
+            // Gameシーンへ遷移
+            SceneManager.LoadScene("Game");
+        });
     }
 
     /// <summary>
     /// ポップアップを閉じる
     /// </summary>
     private void OnClickClosePopUp() {
+
+        // Sequenceの初期化
         Sequence sequence = DOTween.Sequence();
 
-        sequence.Append(canvasGroup.DOFade(0, 1.0f)).AppendInterval(1.0f);
+        // 徐々にポップアップを透明にする
+        sequence.Append(canvasGroup.DOFade(0, 1.0f));
 
-        Destroy(gameObject);
+        sequence.AppendInterval(0.2f).OnComplete(() => {
+            // ポップアップを破棄
+            Destroy(gameObject);
+        });
     }
 }

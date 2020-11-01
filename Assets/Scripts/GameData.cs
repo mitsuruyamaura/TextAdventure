@@ -129,8 +129,13 @@ public class GameData : MonoBehaviour
     /// </summary>
     /// <param name="branchNo"></param>
     public void SaveReadBranchNo(int branchNo) {
+        // シナリオの分岐番号をセット
         PlayerPrefs.SetInt(READ_BRANCH_NO + branchNo.ToString(), branchNo);
+
+        // セーブ
         PlayerPrefs.Save();
+
+        Debug.Log("既読 : " + READ_BRANCH_NO + branchNo.ToString());
     }
 
     /// <summary>
@@ -157,20 +162,33 @@ public class GameData : MonoBehaviour
     /// 現在の分岐番号のセーブ
     /// </summary>
     public void Save(int currentBranchNo) {
+        // シナリオの分岐番号をセーブ用にセット
         PlayerPrefs.SetInt(CURRENT_BRANCH_NO + currentBranchNo.ToString(), currentBranchNo);
+
+        // 現在の時間をセット
         PlayerPrefs.SetString(SAVE_TIME_NO + currentBranchNo.ToString(), DateTime.Now.ToString());
 
+        // セーブ
         PlayerPrefs.Save();
-        Debug.Log("Save : " + CURRENT_BRANCH_NO + currentBranchNo + " : 時間 : " + DateTime.Now.ToString());
-     }
 
+        Debug.Log("Save : " + CURRENT_BRANCH_NO + currentBranchNo + " : 時間 : " + DateTime.Now.ToString());
+    }
+
+    /// <summary>
+    /// セーブデータをロードして取得
+    /// </summary>
+    /// <returns></returns>
     public Dictionary<int, string> GetSaveDatas() {
-        // 
+        // Dictionaryを初期化
         Dictionary<int, string> saveDatas = new Dictionary<int, string>();
 
+        // シナリオの数分だけ処理を行う
         for (int i = 0; i < scenarioSO.senarioMasterData.senario.Count; i++) {
+
+            // シナリオの分岐番号のセーブデータがある場合
             if (PlayerPrefs.HasKey(CURRENT_BRANCH_NO + i.ToString())) {
 
+                // セーブデータのDictionaryに追加
                 saveDatas.Add(PlayerPrefs.GetInt(CURRENT_BRANCH_NO + i.ToString()), PlayerPrefs.GetString(SAVE_TIME_NO + i.ToString()));
 
                 Debug.Log("保存データ 分岐番号 : " + CURRENT_BRANCH_NO + i.ToString());
@@ -181,6 +199,7 @@ public class GameData : MonoBehaviour
         // Debug用
         //saveDatas.Add(1, "2020.10.31.14.35.04");
 
+        // セーブデータを戻す
         return saveDatas;
     }
 }

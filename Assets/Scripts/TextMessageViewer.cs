@@ -53,23 +53,23 @@ public class TextMessageViewer : MonoBehaviour {
 
     public int currentBranchNo;
 
-    public float skipSpeed = 0f;
+    public float skipSpeed = 0f;                        // 既読メッセージのスキップ速度。0は待ち時間なし
 
-    private float currentWordSpeed;
+    private float currentWordSpeed;                     // 現在の文字送りの速度
 
-    public float autoPlayWaitTime = 1.0f;
+    public float autoPlayWaitTime = 1.0f;               // 自動再生中のメッセージ表示後の待ち時間
 
-    public Button btnSave;
+    public Button btnSave;                              // セーブボタン制御用
 
-    public Button btnLoad;
+    public Button btnLoad;                              // ロードボタン制御用
 
-    public DataLoadPopUp dataLoadPopUpPrefab;
+    public DataLoadPopUp dataLoadPopUpPrefab;           // DataloadPopUpのプレファブアサイン用
 
-    public Transform canvasTran;
+    public Transform canvasTran;                        // DataloadPopUpの生成位置
 
-    private DataLoadPopUp dataLoadPopUp;
+    private DataLoadPopUp dataLoadPopUp;                // 生成されたLDataloadPopUpの代入用。複数生成を制御
 
-    private bool isSaving;
+    private bool isSaving;                              // セーブ制御用。分岐１つにつき、１回のみ
 
 
     void Start() {

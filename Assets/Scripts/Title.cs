@@ -8,17 +8,23 @@ public class Title : MonoBehaviour
 {
     public bool isNewGameButton;
 
-    public Button btnNewGame;
+    // UI関連
+    [SerializeField]
+    private Button btnNewGame;
 
-    public Button btnDataLoad;
+    [SerializeField]
+    private Button btnDataLoad;
 
-    public Button btnStart;
+    [SerializeField]
+    private Button btnStart;
 
-    public DataLoadPopUp dataLoadPopUpPrefab;
+    [SerializeField]
+    private DataLoadPopUp dataLoadPopUpPrefab;    // ロード用ポップアップのプレファブアサイン用
 
-    public Transform canvasTran;
+    [SerializeField]
+    private Transform canvasTran;                 // ロード用ポップアップの生成位置
 
-    private DataLoadPopUp dataLoadPopUp;
+    private DataLoadPopUp dataLoadPopUp;         // 生成されたロード用ポップアップの代入用。複数生成を制御
 
     /// <summary>
     /// エンディングを見た数の確認
@@ -82,6 +88,7 @@ public class Title : MonoBehaviour
         // ロード用ポップアップを生成
         dataLoadPopUp = Instantiate(dataLoadPopUpPrefab, canvasTran, false);
 
+        // ポップアップを設定
         dataLoadPopUp.SetUpDataLoadPopUp();
     }
 }
