@@ -30,6 +30,9 @@ public class GameDirector : MonoBehaviour
         // シナリオの初期値
         currentSenarioNo = 0;
 
+        // データをロードしている場合には、ロードした分岐番号でスタートする
+        currentSenarioNo = GameData.instance.loadBranchNo;
+
         // 最初のSenarioを読み込んでゲームスタート
         SetUpSenario(currentSenarioNo);
 

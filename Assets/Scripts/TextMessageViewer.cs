@@ -57,6 +57,20 @@ public class TextMessageViewer : MonoBehaviour {
 
     private float currentWordSpeed;
 
+    public float autoPlayWaitTime = 1.0f;
+
+    public Button btnSave;
+
+    public Button btnLoad;
+
+    public DataLoadPopUp dataLoadPopUpPrefab;
+
+    public Transform canvasTran;
+
+    private DataLoadPopUp dataLoadPopUp;
+
+    private bool isSaving;
+
 
     void Start() {
         iconNextTap.SetActive(false);
@@ -66,6 +80,9 @@ public class TextMessageViewer : MonoBehaviour {
 
         btnAutoPlay.onClick.AddListener(OnClickAutoPlay);
         btnSkip.onClick.AddListener(OnClickSkipReadingMessage);
+
+        btnSave.onClick.AddListener(OnClickSave);
+        btnLoad.onClick.AddListener(OnClickDataLoad);
 
         currentWordSpeed = wordSpeed;
     }
@@ -135,6 +152,10 @@ public class TextMessageViewer : MonoBehaviour {
 
         // 既読スキップ
         SkipMessage();
+
+        // セーブできるようにする
+        isSaving = false;
+        btnSave.interactable = true;
 
         // 1文字ずつメッセージ表示を開始
         StartCoroutine(DisplayMessage());
@@ -276,6 +297,10 @@ public class TextMessageViewer : MonoBehaviour {
             // タップを待つ
             yield return new WaitUntil(() => isTapped);
             Debug.Log("非オート。タップ待ち");
+        } else {
+            // 自動再生中は１つのメッセージ全文を表示したら、指定した秒数待機
+            yield return new WaitForSeconds(autoPlayWaitTime);
+            Debug.Log("オート中 : " + autoPlayWaitTime + " 秒待機");
         }
         
         iconNextTap.SetActive(false);
@@ -382,4 +407,36 @@ public class TextMessageViewer : MonoBehaviour {
 
 
     // ここまで
+
+
+    /// <summary>
+    /// セーブ呼び出し
+    /// </summary>
+    private void OnClickSave() {
+        
+        // 一度だけセーブさせる
+        if (isSaving) {
+            return;
+        }
+
+        isSaving = true;
+        btnSave.interactable = false;
+
+        GameData.instance.Save(currentBranchNo);
+    }
+
+    /// <summary>
+    /// ロード用ポップアップ生成
+    /// </summary>
+    public void OnClickDataLoad() {
+        if (dataLoadPopUp != null) {
+            // ロード用ポップアップがすでに生成されている場合には処理しない(複数生成を防止)
+            return;
+        }
+
+        // ロード用ポップアップを生成
+        dataLoadPopUp = Instantiate(dataLoadPopUpPrefab, canvasTran, false);
+
+        dataLoadPopUp.SetUpDataLoadPopUp();
+    }
 }

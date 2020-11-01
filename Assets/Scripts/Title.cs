@@ -10,6 +10,16 @@ public class Title : MonoBehaviour
 
     public Button btnNewGame;
 
+    public Button btnDataLoad;
+
+    public Button btnStart;
+
+    public DataLoadPopUp dataLoadPopUpPrefab;
+
+    public Transform canvasTran;
+
+    private DataLoadPopUp dataLoadPopUp;
+
     /// <summary>
     /// エンディングを見た数の確認
     /// </summary>
@@ -38,12 +48,17 @@ public class Title : MonoBehaviour
             CheckEndingCount();
         }
 
+        btnStart.onClick.AddListener(LoadMain);
+
         // 追加
 
         // セーブされている、既読のシナリオ分岐番号を取得
         GameData.instance.LoadReadBranchNos();
 
         // ここまで
+
+        // ロードボタンにメソッドを登録
+        btnDataLoad.onClick.AddListener(OnClickDataLoad);
 
     }
 
@@ -53,6 +68,21 @@ public class Title : MonoBehaviour
     public void OnClickNewGameButton() {
         // 新しいゲーム、エンディングのスタート内容を記述
 
+    }
+
+    /// <summary>
+    /// ロード用ポップアップ生成
+    /// </summary>
+    public void OnClickDataLoad() {
+        if (dataLoadPopUp != null) {
+            // ロード用ポップアップがすでに生成されている場合には処理しない(複数生成を防止)
+            return;
+        }
+        
+        // ロード用ポップアップを生成
+        dataLoadPopUp = Instantiate(dataLoadPopUpPrefab, canvasTran, false);
+
+        dataLoadPopUp.SetUpDataLoadPopUp();
     }
 }
 
