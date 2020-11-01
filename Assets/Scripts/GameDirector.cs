@@ -21,14 +21,21 @@ public class GameDirector : MonoBehaviour
 
         // SenarioDataの準備
         //if (senarioSO.senarioMasterData.senario.Count > 0) {
-            // SenarioDataの作成
-            //CreateSenarioData();           
+        // SenarioDataの作成
+        //CreateSenarioData();           
         //} else {
         //    // SenarioDataの読み込み
         //    LoadSenarioData();
         //}
-        // シナリオの初期値
-        currentSenarioNo = 0;
+
+        // ロードデータがあるか確認
+        if (GameData.instance.loadBranchNo != 0) {
+            // データをロードしている場合には、ロードした分岐番号でスタートする
+            currentSenarioNo = GameData.instance.loadBranchNo;
+        } else {
+            // シナリオの初期値をセットし、最初からスタートする
+            currentSenarioNo = 0;
+        }       
 
         // 最初のSenarioを読み込んでゲームスタート
         SetUpSenario(currentSenarioNo);

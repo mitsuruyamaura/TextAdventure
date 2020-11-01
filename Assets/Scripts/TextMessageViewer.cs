@@ -53,9 +53,23 @@ public class TextMessageViewer : MonoBehaviour {
 
     public int currentBranchNo;
 
-    public float skipSpeed = 0f;
+    public float skipSpeed = 0f;                        // 既読メッセージのスキップ速度。0は待ち時間なし
 
-    private float currentWordSpeed;
+    private float currentWordSpeed;                     // 現在の文字送りの速度
+
+    public float autoPlayWaitTime = 1.0f;               // 自動再生中のメッセージ表示後の待ち時間
+
+    public Button btnSave;                              // セーブボタン制御用
+
+    public Button btnLoad;                              // ロードボタン制御用
+
+    public DataLoadPopUp dataLoadPopUpPrefab;           // DataloadPopUpのプレファブアサイン用
+
+    public Transform canvasTran;                        // DataloadPopUpの生成位置
+
+    private DataLoadPopUp dataLoadPopUp;                // 生成されたLDataloadPopUpの代入用。複数生成を制御
+
+    private bool isSaving;                              // セーブ制御用。分岐１つにつき、１回のみ
 
 
     void Start() {
@@ -66,6 +80,9 @@ public class TextMessageViewer : MonoBehaviour {
 
         btnAutoPlay.onClick.AddListener(OnClickAutoPlay);
         btnSkip.onClick.AddListener(OnClickSkipReadingMessage);
+
+        btnSave.onClick.AddListener(OnClickSave);
+        btnLoad.onClick.AddListener(OnClickDataLoad);
 
         currentWordSpeed = wordSpeed;
     }
@@ -135,6 +152,10 @@ public class TextMessageViewer : MonoBehaviour {
 
         // 既読スキップ
         SkipMessage();
+
+        // セーブできるようにする
+        isSaving = false;
+        btnSave.interactable = true;
 
         // 1文字ずつメッセージ表示を開始
         StartCoroutine(DisplayMessage());
@@ -276,6 +297,10 @@ public class TextMessageViewer : MonoBehaviour {
             // タップを待つ
             yield return new WaitUntil(() => isTapped);
             Debug.Log("非オート。タップ待ち");
+        } else {
+            // 自動再生中は１つのメッセージ全文を表示したら、指定した秒数待機
+            yield return new WaitForSeconds(autoPlayWaitTime);
+            Debug.Log("オート中 : " + autoPlayWaitTime + " 秒待機");
         }
         
         iconNextTap.SetActive(false);
@@ -382,4 +407,36 @@ public class TextMessageViewer : MonoBehaviour {
 
 
     // ここまで
+
+
+    /// <summary>
+    /// セーブ呼び出し
+    /// </summary>
+    private void OnClickSave() {
+        
+        // 一度だけセーブさせる
+        if (isSaving) {
+            return;
+        }
+
+        isSaving = true;
+        btnSave.interactable = false;
+
+        GameData.instance.Save(currentBranchNo);
+    }
+
+    /// <summary>
+    /// ロード用ポップアップ生成
+    /// </summary>
+    public void OnClickDataLoad() {
+        if (dataLoadPopUp != null) {
+            // ロード用ポップアップがすでに生成されている場合には処理しない(複数生成を防止)
+            return;
+        }
+
+        // ロード用ポップアップを生成
+        dataLoadPopUp = Instantiate(dataLoadPopUpPrefab, canvasTran, false);
+
+        dataLoadPopUp.SetUpDataLoadPopUp();
+    }
 }
