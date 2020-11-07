@@ -16,39 +16,43 @@ MonoBehaviour:
     senario:
     - senarioNo: 0
       messageString: "\u3042\u3044\u3046\u3048\u304A,\u304B\u304D\u304F\u3051\u3053"
-      charaNoString: 1,2
+      charaNoString: 
       branchString: -1
       displayCharaString: 3/0,1
       backgroundImageNo: 0
       bgmNo: 0
       branchMessageString: 123,aaa
       autoScenarioNo: 1
+      endingNo: 0
       messages:
       - "\u3042\u3044\u3046\u3048\u304A"
       - "\u304B\u304D\u304F\u3051\u3053"
-      charaTypes: 0100000002000000
+      charaTypes: 
       branchs: ffffffff
       branchMessages:
       - 123
       - aaa
+      conditionalBranchNo: 
     - senarioNo: 1
       messageString: "\u3055\u3057\u3059\u305B\u305D\n\u306A\u306B\u306C\u306D\u306E,\u305F\u3061\u3064\u3066\u3068"
       charaNoString: 0,1
-      branchString: 0,1,2
+      branchString: 5/1/0,1,2
       displayCharaString: 0,2/1
       backgroundImageNo: 1
       bgmNo: 0
       branchMessageString: fff,ddd,kkk
       autoScenarioNo: 0
+      endingNo: 1
       messages:
       - "\u3055\u3057\u3059\u305B\u305D\n\u306A\u306B\u306C\u306D\u306E"
       - "\u305F\u3061\u3064\u3066\u3068"
       charaTypes: 0000000001000000
-      branchs: 000000000100000002000000
+      branchs: 010000000100000002000000
       branchMessages:
       - fff
       - ddd
       - kkk
+      conditionalBranchNo: 05000000
     - senarioNo: 2
       messageString: "\u308F\u3092\u3093"
       charaNoString: 2,3
@@ -58,9 +62,11 @@ MonoBehaviour:
       bgmNo: 0
       branchMessageString: gggg
       autoScenarioNo: 0
+      endingNo: 0
       messages:
       - "\u308F\u3092\u3093"
       charaTypes: 0200000003000000
       branchs: 00000000
       branchMessages:
       - gggg
+      conditionalBranchNo: 

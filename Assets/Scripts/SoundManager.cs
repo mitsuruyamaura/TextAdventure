@@ -26,6 +26,7 @@ public class SoundManager : MonoBehaviour {
     public enum BGM_Type : int {
         TITLE,
         MAIN,
+        NO_MUSIC = 999,
     }
 
     // 効果音管理(適宜追加する)
@@ -83,6 +84,12 @@ public class SoundManager : MonoBehaviour {
     /// <param name="bgmNo"></param>
     /// <param name="loopFlg"></param>
     public void PlayBGM(BGM_Type bgmNo, bool loopFlg = true) {
+        // BGMなしの場合
+        if ((int)bgmNo == 999) {
+            StopAllBGM();
+            return;
+        }
+
         int index = (int)bgmNo;
         currentBgmIndex = index;
 
