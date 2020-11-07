@@ -12,6 +12,12 @@ public class LoadDataSelectButton : MonoBehaviour
     [SerializeField]
     private Text txtLoadDataInfo;           // Text制御用。セーブ番号と保存時間表示
 
+    [SerializeField]
+    private Image imgBackGround;　　　　　　// Image制御用。サムネイルの背景設定用
+
+    [SerializeField]
+    private Image imgChara;                 // Image制御用。サムネイルのキャラ設定用
+
     public CanvasGroup canvasGroup;         // CanvasGroupの透明度の制御用
 
     public bool isClickable;                // 重複タップ防止制御用。true はタップ済
@@ -37,6 +43,21 @@ public class LoadDataSelectButton : MonoBehaviour
 
         // ボタンにメソッドを登録
         btnLoad.onClick.AddListener(OnClickLoadButton);
+
+        // 現在のシナリオデータをシナリオの番号で検索して、scenerioData 変数へ代入
+        SenarioMasterData.SenarioData scenarioData = GameData.instance.scenarioSO.senarioMasterData.senario.Find((x) => x.senarioNo == this.branchNo); 
+
+        // サムネイルの背景設定
+        imgBackGround.sprite = Resources.Load<Sprite>("BackGround/" + scenarioData.backgroundImageNo);
+
+        // サムネイルのキャラ設定
+        if (scenarioData.charaTypes.Length > 0) {
+            // シナリオ番号の最初のキャラを表示
+            imgChara.sprite = Resources.Load<Sprite>("Charas/chara_" + (int)scenarioData.charaTypes[0]);
+        } else {
+            // キャラがいない場合、透明にして背景だけにする
+            imgChara.color = new Color(255, 255, 255, 0);
+        }
     }
 
     /// <summary>
