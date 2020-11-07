@@ -420,8 +420,11 @@ public class TextMessageViewer : MonoBehaviour {
         }
 
         isSaving = true;
+
+        // セーブボタンを非活性化して押せなくする
         btnSave.interactable = false;
 
+        // 現在のシナリオデータの番号をセーブ
         GameData.instance.Save(currentBranchNo);
     }
 
@@ -437,6 +440,7 @@ public class TextMessageViewer : MonoBehaviour {
         // ロード用ポップアップを生成
         dataLoadPopUp = Instantiate(dataLoadPopUpPrefab, canvasTran, false);
 
+        // ポップアップの設定を実行
         dataLoadPopUp.SetUpDataLoadPopUp();
     }
 }
