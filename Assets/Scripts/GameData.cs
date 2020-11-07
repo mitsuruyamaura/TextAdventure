@@ -55,10 +55,14 @@ public class GameData : MonoBehaviour
         scenarioSO.senarioMasterData = LoadMasterDataFromJson.LoadSenarioMasterDataFromJson();
 
         // 文字列を適宜な型に変換して配列に代入
-        foreach (SenarioMasterData.SenarioData senarioData in scenarioSO.senarioMasterData.senario) {
+        foreach (SenarioMasterData.SenarioData senarioData in scenarioSO.senarioMasterData.senario) {            
             senarioData.messages = senarioData.messageString.Split(',').ToArray();
-            senarioData.charaTypes = senarioData.charaNoString.Split(',').Select(x => (CHARA_NAME_TYPE)Enum.Parse(typeof(CHARA_NAME_TYPE), x)).ToArray();
-            
+
+            // キャラ表示する場合
+            if (!string.IsNullOrEmpty(senarioData.charaNoString)) {
+                senarioData.charaTypes = senarioData.charaNoString.Split(',').Select(x => (CHARA_NAME_TYPE)Enum.Parse(typeof(CHARA_NAME_TYPE), x)).ToArray();
+            }
+
             // 分岐番号の文字列をカンマ位置で分割して配列に代入
             string[] tempBranchNos = senarioData.branchString.Split(',').ToArray();
 
@@ -78,21 +82,28 @@ public class GameData : MonoBehaviour
                     // 条件のない通常の分岐はそのまま配列に代入
                     senarioData.branchs[x] = int.Parse(tempBranchNos[x]); 
                 }
-            } 
-  
+            }
+
             // 今までの分岐番号の代入は不要になる
             //senarioData.branchs = senarioData.branchString.Split(',').Select(x => int.Parse(x)).ToArray();
 
-            senarioData.branchMessages = senarioData.branchMessageString.Split(',').ToArray(); // 追加。分岐メッセージを配列にする
+            // 分岐がある場合
+            if (!string.IsNullOrEmpty(senarioData.branchMessageString)) {
+                // 分岐メッセージを配列にする
+                senarioData.branchMessages = senarioData.branchMessageString.Split(',').ToArray(); 
+            }
 
-            List<string> strList = senarioData.displayCharaString.Split('/').ToList();
+            // 表示するキャラがいる場合
+            if (!string.IsNullOrEmpty(senarioData.displayCharaString)) {
+                List<string> strList = senarioData.displayCharaString.Split('/').ToList();
 
-            int i = 0;
-            senarioData.displayCharas = new Dictionary<int, CHARA_NAME_TYPE[]>();
-            foreach (string str in strList) {
-                CHARA_NAME_TYPE[] displayChara = str.Split(',').Select(x => (CHARA_NAME_TYPE)Enum.Parse(typeof(CHARA_NAME_TYPE), x)).ToArray();
-                senarioData.displayCharas.Add(i, displayChara);
-                i++;
+                int i = 0;
+                senarioData.displayCharas = new Dictionary<int, CHARA_NAME_TYPE[]>();
+                foreach (string str in strList) {
+                    CHARA_NAME_TYPE[] displayChara = str.Split(',').Select(x => (CHARA_NAME_TYPE)Enum.Parse(typeof(CHARA_NAME_TYPE), x)).ToArray();
+                    senarioData.displayCharas.Add(i, displayChara);
+                    i++;
+                }
             }
         }
         Debug.Log("Create SenarioDataList");
