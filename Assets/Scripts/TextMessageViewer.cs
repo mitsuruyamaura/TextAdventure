@@ -71,6 +71,11 @@ public class TextMessageViewer : MonoBehaviour {
 
     private bool isSaving;                              // セーブ制御用。分岐１つにつき、１回のみ
 
+    //　追加
+　
+    private int backGroundImageNo;                      // 背景用画像の番号。CGの場合は100から設定
+
+    //　ここまで
 
     void Start() {
         iconNextTap.SetActive(false);
@@ -121,8 +126,23 @@ public class TextMessageViewer : MonoBehaviour {
         messagesIndex = 0;
         isDisplayedAllMessage = false;
 
-        // シナリオの背景を設定
-        imgBackground.sprite = Resources.Load<Sprite>("BackGround/" + senarioData.backgroundImageNo);
+
+        //　追加
+
+        // 背景の番号を設定
+        backGroundImageNo = senarioData.backgroundImageNo;
+
+        // シナリオの背景を設定。背景の番号がCGの番号以外なら
+        if (backGroundImageNo < 100) {
+            // 通常の背景を設定
+            imgBackground.sprite = Resources.Load<Sprite>("BackGround/" + backGroundImageNo);
+
+        } else {
+            // CGを設定
+            imgBackground.sprite = Resources.Load<Sprite>("CG/cg_" + (backGroundImageNo - 100));
+        }
+
+        //　ここまで
 
         autoScenerioNo = senarioData.autoScenarioNo;
 
@@ -319,6 +339,18 @@ public class TextMessageViewer : MonoBehaviour {
 
             // 現在のシナリオの分岐番号を既読番号として保存
             GameData.instance.SaveReadBranchNo(currentBranchNo);
+
+
+            // 追加
+
+            // 背景としてCGを表示していたなら
+            if (backGroundImageNo >= 100) {
+                // 回収済みとしてCG番号を保存
+                GameData.instance.SaveGetCGNo(backGroundImageNo);
+            }
+
+            // ここまで
+
 
             // エンディングか確認
             if (JudgeEnding()) {

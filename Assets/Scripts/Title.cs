@@ -18,13 +18,20 @@ public class Title : MonoBehaviour
     [SerializeField]
     private Button btnStart;
 
+    // 追加
+
+    [SerializeField]
+    private Button btnAlbum;                      // アルバムシーンへ遷移するボタンの制御用
+
+    // ここまで
+
     [SerializeField]
     private DataLoadPopUp dataLoadPopUpPrefab;    // ロード用ポップアップのプレファブアサイン用
 
     [SerializeField]
     private Transform canvasTran;                 // ロード用ポップアップの生成位置
 
-    private DataLoadPopUp dataLoadPopUp;         // 生成されたロード用ポップアップの代入用。複数生成を制御
+    private DataLoadPopUp dataLoadPopUp;          // 生成されたロード用ポップアップの代入用。複数生成を制御
 
     /// <summary>
     /// エンディングを見た数の確認
@@ -56,16 +63,21 @@ public class Title : MonoBehaviour
 
         btnStart.onClick.AddListener(LoadMain);
 
-        // 追加
-
         // セーブされている、既読のシナリオ分岐番号を取得
         GameData.instance.LoadReadBranchNos();
-
-        // ここまで
 
         // ロードボタンにメソッドを登録
         btnDataLoad.onClick.AddListener(OnClickDataLoad);
 
+        // 追加
+
+        // 回収しているCGがあるか確認して、回収しているCGはリストに登録
+        GameData.instance.LoadGetCGNos();
+
+        // アルバムシーンへの遷移処理を登録
+        btnAlbum.onClick.AddListener(OnClickAlbumScene);
+
+        // ここまで
     }
 
     /// <summary>
@@ -90,6 +102,13 @@ public class Title : MonoBehaviour
 
         // ポップアップを設定
         dataLoadPopUp.SetUpDataLoadPopUp();
+    }
+
+    /// <summary>
+    /// アルバムシーンへ遷移
+    /// </summary>
+    private void OnClickAlbumScene() {
+        SceneManager.LoadScene("Album");
     }
 }
 
