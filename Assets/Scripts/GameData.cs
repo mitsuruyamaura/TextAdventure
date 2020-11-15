@@ -33,6 +33,18 @@ public class GameData : MonoBehaviour
     public int loadBranchNo;
 
 
+    //　ここから
+
+    public List<int> getCGNos = new List<int>();    // 獲得したCGの番号のリスト。-100して作成する
+
+    private string GET_CG_NO = "getCGNo_";
+
+    [Header("CGの総数")]
+    public int cgTotalCount;
+
+    // ここまで
+
+
     void Awake() {
         if (instance == null) {
             instance = this;
@@ -58,7 +70,7 @@ public class GameData : MonoBehaviour
         foreach (SenarioMasterData.SenarioData senarioData in scenarioSO.senarioMasterData.senario) {            
             senarioData.messages = senarioData.messageString.Split(',').ToArray();
 
-            // キャラ表示する場合
+            // 表示するキャラがいる場合
             if (!string.IsNullOrEmpty(senarioData.charaNoString)) {
                 senarioData.charaTypes = senarioData.charaNoString.Split(',').Select(x => (CHARA_NAME_TYPE)Enum.Parse(typeof(CHARA_NAME_TYPE), x)).ToArray();
             }
@@ -212,5 +224,43 @@ public class GameData : MonoBehaviour
 
         // セーブデータを戻す
         return saveDatas;
+    }
+
+    /// <summary>
+    /// 回収したCGの番号を保存
+    /// </summary>
+    /// <param name="backGroundImageNo"></param>
+    public void SaveGetCGNo(int backGroundImageNo) {
+        // CGの番号を設定
+        int cgNo = backGroundImageNo - 100;
+
+        // ラベルと番号をセットしてセーブの準備
+        PlayerPrefs.SetInt(GET_CG_NO + cgNo, cgNo);
+
+        // セーブ
+        PlayerPrefs.Save();
+
+        Debug.Log("CG回収 : " + GET_CG_NO + cgNo);
+    }
+
+    /// <summary>
+    /// 回収しているCGの番号を保存データと照合してロード
+    /// </summary>
+    public void LoadGetCGNos() {
+
+        // 登録されているCGの数だけ確認する
+        for (int i = 0; i < cgTotalCount; i++) {
+
+            // CGの通し番号と保存させているCGの番号を照合
+            if (PlayerPrefs.HasKey(GET_CG_NO + i)) {
+
+                // 保存されている番号があったらListに追加
+                getCGNos.Add(i);
+
+                Debug.Log("回収済CG : " + GET_CG_NO + i);
+            }
+        }
+
+        Debug.Log("回収済みCG : " + getCGNos.Count + " / " + cgTotalCount);
     }
 }
