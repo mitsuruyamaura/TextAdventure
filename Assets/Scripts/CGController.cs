@@ -12,6 +12,10 @@ public class CGController : MonoBehaviour
     [SerializeField]
     private Button btnCloseCG;    // CG全体をボタンにしてあり、その制御用
 
+    /// <summary>
+    /// 選択したサムネイルの画像をCGとして設定
+    /// </summary>
+    /// <param name="spriteCG"></param>
     public void SetUpCG(Sprite spriteCG) {
 
         // CGの画像をCG選択ボタンのサムネイル画像と同じ画像に設定
